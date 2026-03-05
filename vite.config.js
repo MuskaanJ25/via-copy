@@ -5,10 +5,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
-    allowedHosts: true,
-    proxy: {
-      '/api': 'http://localhost:3001'
-    }
+    allowedHosts: true
   },
   build: {
     outDir: 'dist'

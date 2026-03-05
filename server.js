@@ -1,29 +1,25 @@
-const express = require('express')
-const path = require('path')
-const fs = require('fs')
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const app = express()
-const PORT = 3001
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// API routes
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+app.use(express.json());
+
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Server is running' })
-})
+  res.json({ status: 'ok', message: 'Via API is running' });
+});
 
-// Serve static files from dist in production, proxy to vite in dev
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'dist')))
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-  })
-} else {
-  // In dev, Vite handles static files
-  app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'))
-  })
-  app.use(express.static(__dirname))
-}
+app.use(express.static(path.join(__dirname, 'dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
-})
+  console.log(`Server running on port ${PORT}`);
+});
